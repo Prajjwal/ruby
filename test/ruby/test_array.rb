@@ -1091,6 +1091,24 @@ class TestArray < Test::Unit::TestCase
     assert_equal(@cls['h', nil, 'a'], a.values_at(-3, 99, 0))
   end
 
+  def test_except_indices
+    a = @cls['a', 'b', 'c', 'd', 'e']
+
+    assert_equal(@cls['a', 'c'], a.except_indices(1, -2, -1))
+    assert_equal(@cls['c', 'd', 'e'], a.except_indices(0, 1, 10))
+    assert_equal(@cls['a', 'b', 'c', 'd', 'e'], a.except_indices(10, 20, 30))
+
+    assert_equal(@cls[], a.except_indices(0..4))
+    assert_equal(@cls['c', 'd', 'e'], a.except_indices(0..1))
+    assert_equal(@cls['c'], a.except_indices(0..1, 3..4))
+    assert_equal(@cls['a', 'b', 'c'], a.except_indices(3..15))
+    # Logically except_indices is the complement of values_at, and values_at
+    # returns an empty array when given a range starting with a negative number.
+    # This could change in the future.
+    # https://bugs.ruby-lang.org/issues/16678
+    assert_equal(@cls['a', 'b', 'c', 'd', 'e'], a.except_indices(-1..2))
+  end
+
   def test_join
     $, = ""
     a = @cls[]

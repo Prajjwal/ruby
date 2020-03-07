@@ -16,6 +16,10 @@ class Array
     __builtin_rb_ary_shuffle_bang(random)
   end
 
+  def except_indices(*idx)
+    self - self.values_at(*idx)
+  end
+
   # call-seq:
   #    ary.shuffle              -> new_ary
   #    ary.shuffle(random: rng) -> new_ary
